@@ -22,6 +22,7 @@ jobs:
       - run: ROLE_ARN="arn:aws:iam::044798518090:role/demo-role-codemmit"
       - run: SESSION_NAME="Github"
       - run: DURATION_SECONDS=60  # Duration of the assumed role session in seconds
+      - run: aws --version
       - run: assume_role_output=$(aws sts assume-role --role-arn "$ROLE_ARN" --role-session-name "$SESSION_NAME" --duration-seconds "$DURATION_SECONDS")
       - run: access_key=$(echo "$assume_role_output" | jq -r '.Credentials.AccessKeyId')
       - run: secret_key=$(echo "$assume_role_output" | jq -r '.Credentials.SecretAccessKey')
