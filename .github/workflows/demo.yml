@@ -19,23 +19,30 @@ jobs:
           role-skip-session-tagging: true
           role-duration-seconds: 900
 
-      - name: PushToCodeCommmit
-        id: pushtocodecommit
-        run: |
-          repourl="https://git-codecommit.us-east-1.amazonaws.com/v1/repos/demo-codepipeline"
-          ls -la
-          aws --version
-          aws sts get-caller-identity
+      - name: Sync up to CodeCommit
+        uses: afinkorea/sync-up-to-codecommit-action@v1
+        with:
+          repository_name: demo-codepipeline
+          aws_region: us-east-1
+          branch: ${{ github.ref }}
 
-          git config --global user.email "githubaction@github.com"
-          git config --global user.name "Github Action"
-          git config --global credential.helper '!aws --profile=default codecommit credential-helper $@'
-          git config --global credential.UseHttpPath true
+      # - name: PushToCodeCommmit
+      #   id: pushtocodecommit
+      #   run: |
+      #     repourl="https://git-codecommit.us-east-1.amazonaws.com/v1/repos/demo-codepipeline"
+      #     ls -la
+      #     aws --version
+      #     aws sts get-caller-identity
 
-          git clone ${{ github.repository }}
-          cd demo-aws-codepipeline
-          git status
-          git add .
-          git commit -m "teste"
-          git remote add codemmit ${repourl}
-          git push codemmit 
+      #     git config --global user.email "githubaction@github.com"
+      #     git config --global user.name "Github Action"
+      #     git config --global credential.helper '!aws --profile=default codecommit credential-helper $@'
+      #     git config --global credential.UseHttpPath true
+
+      #     git clone ${{ github.repository }}
+      #     cd demo-aws-codepipeline
+      #     git status
+      #     git add .
+      #     git commit -m "teste"
+      #     git remote add codemmit ${repourl}
+      #     git push codemmit 
