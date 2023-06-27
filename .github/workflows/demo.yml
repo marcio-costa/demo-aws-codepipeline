@@ -1,37 +1,25 @@
-name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+name: sync up to codecommit
+
 on: [push]
+
 jobs:
-  Explore-GitHub-Actions:
+  sync:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: Check out repository code
+      - name: Checkout
         uses: actions/checkout@v3
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: List files in the repository
-        run: |
-          ls ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ job.status }}."
-      - run: git config --global --add safe.directory /github/workspace
-      - run: git config --global credential.'https://git-codecommit.*.amazonaws.com'.helper '!aws codecommit credential-helper $@'
-      - run: git config --global credential.UseHttpPath true
-      - run: ROLE_ARN="arn:aws:iam::044798518090:role/demo-role-codemmit"
-      - run: SESSION_NAME="Github"
-      - run: DURATION_SECONDS=60  # Duration of the assumed role session in seconds
-      - run: aws --version
-      - run: assume_role_output=$(aws sts assume-role --role-arn "$ROLE_ARN" --role-session-name "$SESSION_NAME" --duration-seconds "$DURATION_SECONDS")
-      - run: access_key=$(echo "$assume_role_output" | jq -r '.Credentials.AccessKeyId')
-      - run: secret_key=$(echo "$assume_role_output" | jq -r '.Credentials.SecretAccessKey')
-      - run: session_token=$(echo "$assume_role_output" | jq -r '.Credentials.SessionToken')
-      - run: export AWS_ACCESS_KEY_ID="$access_key"
-      - run: export AWS_SECRET_ACCESS_KEY="$secret_key"
-      - run: export AWS_SESSION_TOKEN="$session_token"
-      - run: |
-          ls ${{ github.workspace }}
 
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::044798518090:role/GithubOIDCRole
+          aws-region: us-east-1
+
+      - name: PushToCodeCommmit
+        id: pushtocodecommit
+        run: |
+          ls -la
+          aws --version
+          aws sts get-caller-identity
 
 
