@@ -14,6 +14,7 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::044798518090:role/GithubOIDCRole
           aws-region: us-east-1
+          role-session-name: github
 
       - name: PushToCodeCommmit
         id: pushtocodecommit
