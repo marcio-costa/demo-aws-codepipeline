@@ -31,6 +31,4 @@ jobs:
           git config --global credential.helper '!aws --profile=default codecommit credential-helper $@'
           git config --global credential.UseHttpPath true
           git remote add codemmit ${repourl}
-          git add .
-          git commit -m "teste"
           git push codemmit main
