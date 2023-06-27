@@ -9,6 +9,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          repository: ${{ inputs.repository }}
+          fetch-depth: 0
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -19,12 +22,31 @@ jobs:
           role-skip-session-tagging: true
           role-duration-seconds: 900
 
-      - name: Sync up to CodeCommit
-        uses: afinkorea/sync-up-to-codecommit-action@v1
-        with:
-          repository_name: demo-codepipeline
-          aws_region: us-east-1
-          branch: main
+      - name: Sync Repository
+      run: |
+          set +x
+          repository_name="$(echo "${{ inputs.repository }}" | sed 's/.*\///g')"
+          git config --global credential.helper '!aws codecommit credential-helper $@'
+          git config --global credential.UseHttpPath true
+          output_json="$(aws codecommit get-repository --repository-name "$repository_name")"
+          if [ $? -ne 0 ]; then
+            output_json="$(aws codecommit create-repository --repository-name "$repository_name")"
+          fi
+          if [ $? -ne 0 ]; then
+            echo "Could not create repository $repository_name"
+            exit 1
+          fi
+          clone_url="$(echo "$output_json" | python3 -c "import sys, json; print(json.load(sys.stdin)['repositoryMetadata']['cloneUrlHttp'])")"
+          git remote add codecommit "$clone_url"
+          git push codecommit --force --mirror
+      shell: bash
+          
+      # - name: Sync up to CodeCommit
+      #   uses: afinkorea/sync-up-to-codecommit-action@v1
+      #   with:
+      #     repository_name: demo-codepipeline
+      #     aws_region: us-east-1
+      #     branch: main
 
       # - name: PushToCodeCommmit
       #   id: pushtocodecommit
