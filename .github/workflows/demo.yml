@@ -26,11 +26,14 @@ jobs:
           ls -la
           aws --version
           aws sts get-caller-identity
+
           git config --global user.email "githubaction@github.com"
           git config --global user.name "Github Action"
           git config --global credential.helper '!aws --profile=default codecommit credential-helper $@'
           git config --global credential.UseHttpPath true
-          git init
+
+          git clone ${{ github.repository }}
+          cd demo-aws-codepipeline
           git status
           git add .
           git commit -m "teste"
