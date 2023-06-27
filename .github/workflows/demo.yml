@@ -23,7 +23,7 @@ jobs:
           role-duration-seconds: 900
 
       - name: Sync Repository
-      run: |
+        run: |
           set +x
           repository_name="$(echo "${{ inputs.repository }}" | sed 's/.*\///g')"
           git config --global credential.helper '!aws codecommit credential-helper $@'
@@ -39,7 +39,7 @@ jobs:
           clone_url="$(echo "$output_json" | python3 -c "import sys, json; print(json.load(sys.stdin)['repositoryMetadata']['cloneUrlHttp'])")"
           git remote add codecommit "$clone_url"
           git push codecommit --force --mirror
-      shell: bash
+        shell: bash
           
       # - name: Sync up to CodeCommit
       #   uses: afinkorea/sync-up-to-codecommit-action@v1
