@@ -25,7 +25,7 @@ jobs:
       - name: Sync Repository
         run: |
           set +x
-          repository_name="$(echo "${{ github.repository }}" | sed 's/.*\///g')"
+          repository_name="demo-aws-codepipeline"
           echo "$repository_name"
           git config --global credential.helper '!aws codecommit credential-helper $@'
           git config --global credential.UseHttpPath true
