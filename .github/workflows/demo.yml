@@ -30,5 +30,7 @@ jobs:
           git config --global user.name "Github Action"
           git config --global credential.helper '!aws --profile=default codecommit credential-helper $@'
           git config --global credential.UseHttpPath true
+          git init
+          git status
           git remote add codemmit ${repourl}
-          git push codemmit main
+          git push codemmit 
