@@ -24,7 +24,7 @@ jobs:
         with:
           repository_name: demo-codepipeline
           aws_region: us-east-1
-          branch: ${{ github.ref }}
+          branch: developer
 
       # - name: PushToCodeCommmit
       #   id: pushtocodecommit
