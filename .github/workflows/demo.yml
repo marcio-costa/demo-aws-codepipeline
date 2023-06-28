@@ -31,7 +31,7 @@ jobs:
           git config --global credential.UseHttpPath true
           mkdir my-repo-folder
           cd my-repo-folder
-          git clone https://github.com/marcio-costa/demo-aws-codepipeline.git .
+          git clone https://github.com/marcio-costa/demo-aws-codepipeline.git
           git remote add codecommit https://git-codecommit.us-east-1.amazonaws.com/v1/repos/demo-codepipeline
           git push codecommit master
           
