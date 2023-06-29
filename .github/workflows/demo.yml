@@ -10,8 +10,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          repository: ${{ inputs.repository }}
+          #repository: ${{ inputs.repository }}
           fetch-depth: 0
+          #path: 'user-repo'
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -29,11 +30,23 @@ jobs:
           git config --global --add safe.directory /github/workspace
           git config --global credential.helper '!aws codecommit credential-helper $@'
           git config --global credential.UseHttpPath true
-          mkdir my-repo-folder
-          cd my-repo-folder
-          git clone https://github.com/marcio-costa/demo-aws-codepipeline.git
+
+          git branch -a
+          git tag
+
           git remote add codecommit https://git-codecommit.us-east-1.amazonaws.com/v1/repos/demo-codepipeline
-          git push codecommit main --force
+          git push --all --force codecommit
+
+          # git config --global user.name "GitHub Actions"
+          # git config --global user.email "actions@github.com"
+          # git config --global --add safe.directory /github/workspace
+          # git config --global credential.helper '!aws codecommit credential-helper $@'
+          # git config --global credential.UseHttpPath true
+          # mkdir my-repo-folder
+          # cd my-repo-folder
+          # git clone https://github.com/marcio-costa/demo-aws-codepipeline.git
+          # git remote add codecommit https://git-codecommit.us-east-1.amazonaws.com/v1/repos/demo-codepipeline
+          # git push --mirror codecommit
           
       # - name: Sync up to CodeCommit
       #   uses: afinkorea/sync-up-to-codecommit-action@v1
