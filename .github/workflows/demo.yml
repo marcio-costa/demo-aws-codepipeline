@@ -49,10 +49,10 @@ jobs:
           only_tags=$(echo "$tags" | tr -d '[]')
           echo $only_branches
           echo $only_tags
-          for branch in $only_branches; do
-            git push --all --force https://git-codecommit.us-east-1.amazonaws.com/v1/repos/demo-codepipeline $branch
-          done
-          #git remote add codecommit https://git-codecommit.us-east-1.amazonaws.com/v1/repos/demo-codepipeline
+          # for branch in $only_branches; do
+          #   git push --all --force https://git-codecommit.us-east-1.amazonaws.com/v1/repos/demo-codepipeline $branch
+          # done
+          git remote add codecommit https://git-codecommit.us-east-1.amazonaws.com/v1/repos/demo-codepipeline
           git push --all --force codecommit
           for tag in $only_tags; do
             git push https://git-codecommit.us-east-1.amazonaws.com/v1/repos/demo-codepipeline refs/tags/$tag
