@@ -51,9 +51,9 @@ jobs:
           for branch in $only_branches; do
             git push https://git-codecommit.us-east-1.amazonaws.com/v1/repos/demo-codepipeline $branch
           done
-          for tag in $tags; do
-            git push https://git-codecommit.us-east-1.amazonaws.com/v1/repos/demo-codepipeline refs/tags/$tag
-          done
+          # for tag in $tags; do
+          #   git push https://git-codecommit.us-east-1.amazonaws.com/v1/repos/demo-codepipeline refs/tags/$tag
+          # done
 
       # - name: Sync Repository
       #   run: |
