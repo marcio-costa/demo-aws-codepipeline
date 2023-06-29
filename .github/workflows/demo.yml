@@ -46,14 +46,16 @@ jobs:
           branches="[${{ steps.fetch-branches-tags.outputs.branches }}]"
           tags="[${{ steps.fetch-branches-tags.outputs.tags }}]"
           only_branches=$(echo "$branches" | tr -d '[]' | sed 's/origin\///g')
+          only_tags=$(echo "$tags" | tr -d '[]')
           echo $only_branches
-          echo $tags
-          for branch in $only_branches; do
-            git push https://git-codecommit.us-east-1.amazonaws.com/v1/repos/demo-codepipeline $branch
-          done
-          # for tag in $tags; do
-          #   git push https://git-codecommit.us-east-1.amazonaws.com/v1/repos/demo-codepipeline refs/tags/$tag
+          echo $only_tags
+          # for branch in $only_branches; do
+          #   git push https://git-codecommit.us-east-1.amazonaws.com/v1/repos/demo-codepipeline $branch
           # done
+          git push --all --force codecommit
+          for only_tags in $tags; do
+            git push https://git-codecommit.us-east-1.amazonaws.com/v1/repos/demo-codepipeline refs/tags/$tag
+          done
 
       # - name: Sync Repository
       #   run: |
