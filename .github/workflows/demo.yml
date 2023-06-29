@@ -57,15 +57,3 @@ jobs:
           for tag in $only_tags; do
             git push https://git-codecommit.us-east-1.amazonaws.com/v1/repos/demo-codepipeline refs/tags/$tag
           done
-
-      # - name: Sync Repository
-      #   run: |
-      #     git config --global user.name "GitHub Actions"
-      #     git config --global user.email "actions@github.com"
-      #     git config --global --add safe.directory /github/workspace
-      #     git config --global credential.helper '!aws codecommit credential-helper $@'
-      #     git config --global credential.UseHttpPath true
-
-
-      #     git remote add codecommit https://git-codecommit.us-east-1.amazonaws.com/v1/repos/demo-codepipeline
-      #     git push --all --force codecommit
