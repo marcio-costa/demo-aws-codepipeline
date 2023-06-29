@@ -23,16 +23,37 @@ jobs:
           role-skip-session-tagging: true
           role-duration-seconds: 900
 
-      - name: Sync Repository
+      - name: Fetch All Branches and Tags
+        id: fetch-branches-tags
+        run: |
+          git fetch --prune --tags
+          branches=$(git branch -r --sort=-committerdate)
+          tags=$(git tag -l --sort=-committerdate)
+          echo "branches=$(echo $branches)" >> $GITHUB_OUTPUT
+          echo "tags=$(echo $tags)" >> $GITHUB_OUTPUT
+          echo $branches
+          echo $tags
+          git branch -a
+          git tag
+
+      - name: Push to AWS CodeCommit
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           git config --global --add safe.directory /github/workspace
           git config --global credential.helper '!aws codecommit credential-helper $@'
           git config --global credential.UseHttpPath true
-
-          git branch -a
-          git tag
-
+          branches="[${{ steps.fetch-branches-tags.outputs.branches }}]"
+          tags="[${{ steps.fetch-branches-tags.outputs.tags }}]"
+          only_branches=$(echo "$branches" | tr -d '[]' | sed 's/origin\///g')
+          only_tags=$(echo "$tags" | tr -d '[]')
+          echo $only_branches
+          echo $only_tags
+          # for branch in $only_branches; do
+          #   git push https://git-codecommit.us-east-1.amazonaws.com/v1/repos/demo-codepipeline $branch
+          # done
           git remote add codecommit https://git-codecommit.us-east-1.amazonaws.com/v1/repos/demo-codepipeline
           git push --all --force codecommit
+          for tag in $only_tags; do
+            git push https://git-codecommit.us-east-1.amazonaws.com/v1/repos/demo-codepipeline refs/tags/$tag
+          done
