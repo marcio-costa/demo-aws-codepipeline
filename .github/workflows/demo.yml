@@ -52,6 +52,7 @@ jobs:
           # for branch in $only_branches; do
           #   git push https://git-codecommit.us-east-1.amazonaws.com/v1/repos/demo-codepipeline $branch
           # done
+          git remote add codecommit https://git-codecommit.us-east-1.amazonaws.com/v1/repos/demo-codepipeline
           git push --all --force codecommit
           for only_tags in $tags; do
             git push https://git-codecommit.us-east-1.amazonaws.com/v1/repos/demo-codepipeline refs/tags/$tag
