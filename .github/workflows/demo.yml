@@ -45,9 +45,10 @@ jobs:
           git config --global credential.UseHttpPath true
           branches="[${{ steps.fetch-branches-tags.outputs.branches }}]"
           tags="[${{ steps.fetch-branches-tags.outputs.tags }}]"
-          echo $branches
+          only_branches=$(echo "$branches" | tr -d '[]' | sed 's/origin\///g')
+          echo $only_branches
           echo $tags
-          for branch in $branches; do
+          for branch in $only_branches; do
             git push https://git-codecommit.us-east-1.amazonaws.com/v1/repos/demo-codepipeline $branch
           done
           for tag in $tags; do
