@@ -29,8 +29,8 @@ jobs:
           git fetch --prune --tags
           branches=$(git branch -r --sort=-committerdate)
           tags=$(git tag -l --sort=-committerdate)
-          #echo "::set-output name=branches::$branches"
-          #echo "::set-output name=tags::$tags"
+          echo "::set-output name=branches::$branches"
+          echo "::set-output name=tags::$tags"
           echo $branches
           echo $tags
           git branch -a
@@ -43,8 +43,8 @@ jobs:
           git config --global --add safe.directory /github/workspace
           git config --global credential.helper '!aws codecommit credential-helper $@'
           git config --global credential.UseHttpPath true
-          branches="${{ steps.fetch-branches-tags.outputs.branches }}"
-          tags="${{ steps.fetch-branches-tags.outputs.tags }}"
+          branches="[${{ steps.fetch-branches-tags.outputs.branches }}]"
+          tags="[${{ steps.fetch-branches-tags.outputs.tags }}]"
           echo $branches
           echo $tags
           for branch in $branches; do
