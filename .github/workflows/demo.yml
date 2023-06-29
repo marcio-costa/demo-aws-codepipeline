@@ -39,6 +39,8 @@ jobs:
         run: |
           branches="${{ steps.fetch-branches-tags.outputs.branches }}"
           tags="${{ steps.fetch-branches-tags.outputs.tags }}"
+          echo $branches
+          echo $tags
           for branch in $branches; do
             git push https://git-codecommit.us-east-1.amazonaws.com/v1/repos/demo-codepipeline $branch
           done
