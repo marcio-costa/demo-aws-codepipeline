@@ -30,6 +30,8 @@ jobs:
           tags=$(git tag -l --sort=-committerdate)
           echo "::set-output name=branches::$branches"
           echo "::set-output name=tags::$tags"
+          echo $branches
+          echo $tags
           git branch -a
           git tag
 
