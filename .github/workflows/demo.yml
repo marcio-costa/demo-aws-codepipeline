@@ -24,6 +24,7 @@ jobs:
           role-duration-seconds: 900
 
       - name: Fetch All Branches and Tags
+        id: fetch-branches-tags
         run: |
           git fetch --prune --tags
           branches=$(git branch -r --sort=-committerdate)
